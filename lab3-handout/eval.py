@@ -49,22 +49,25 @@ def evaluate(args):
 
     experiment.to(args["device"])
     experiment.eval()
-
+    i = 0
     for batch in tqdm(dl_eval):
         X, y_true_batch = batch
         X, y_true_batch = X.to(device), y_true_batch.to(device)
 
-        y_pred_batch = experiment.predict(X)
+        y_pred_batch = experiment.predict(X).argmax(dim=1)
 
         y_true.append(y_true_batch.cpu())
         y_pred.append(y_pred_batch.cpu())
+        
     
     y_true, y_pred = torch.hstack(y_true), torch.hstack(y_pred)
-
+    print(f"Y_true: {y_true.shape}")
+    print(f"y_pred: {y_pred.shape}")
     makedirs(args["output"], exist_ok=True)
+    print(y_pred)
     with open(args["output"] / "eval-report.txt", "w") as fout:
-        # TODO: Write your code here
-        pass
+        fout.write(classification_report(y_true=y_true,y_pred=y_pred))
+        
 
 
     # Plot learning cruve

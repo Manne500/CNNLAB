@@ -271,7 +271,7 @@ class Experiment(object):
         options = load_yaml(model_metadata)
 
         if resume_options is not None:
-            resume_options = load_yaml(resume_options, "r")
+            resume_options = load_yaml(resume_options)
             options.update(resume_options)
 
         # 2. Construct experiment class
@@ -329,9 +329,10 @@ class Experiment(object):
         
         Run the forward pass of the model and apply softmax to produce predictions.
         """
-        # TODO: Write your code here
-        m = nn.Softmax(dim=1)
-        return m(self.ckpt.model(X))
+        with torch.no_grad():
+            self.ckpt.model.eval()
+            m = nn.Softmax(dim=1)
+            return m(self.ckpt.model(X))
       
 
     def eval(self):
@@ -494,5 +495,5 @@ class Experiment(object):
         loss = self.ckpt.criterion(outputs.softmax(dim=1), y)
         loss.backward()
         self.ckpt.optimizer.step()
-        return loss,outputs
+        return loss.item(),outputs
 

@@ -9,6 +9,7 @@ import torchvision.transforms as T
 from typing import Dict, List, Tuple, NewType, Any
 from tqdm import tqdm
 import logging
+from torchvision.models import resnet50, ResNet50_Weights
 
 ImageCollection = NewType("ImageCollection", Dict[str,List[str]])
 
@@ -48,15 +49,28 @@ class ExperimentDataset(Dataset):
 class ImageFolderDataset(datasets.ImageFolder, ExperimentDataset):
     """Dataset that loads images from directory"""
     def create_transforms(self, res=224, augment="none", **kwargs):
+
         to_tensor = v2.Compose([
         v2.ToImage(),
         v2.ToDtype(dtype=torch.float32, scale=True)
         ])
-        fn = v2.Compose([
-        to_tensor,
-        v2.Resize(res),
-        v2.CenterCrop(res),
-        ])
+
+
+        if augment==1:
+            print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHH")
+            fn = v2.Compose([
+            T.TrivialAugmentWide(),
+            ResNet50_Weights.IMAGENET1K_V2.transforms()
+            ])
+        else:
+            fn = v2.Compose([
+            to_tensor,
+            v2.Resize(res),
+            v2.CenterCrop(res),
+            ])
+
+
+
         return fn
 
     def __init__(self, path, **kwargs) -> None:

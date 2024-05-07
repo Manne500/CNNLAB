@@ -1,0 +1,30 @@
+name: Mark 4 - ResNet50
+experiment: RealResNet50
+metrics:
+  halflife: 8 # smoothing option
+model:
+  batchsize: 32
+  epochs: 7
+  n_labels: 5
+  dropout: 0.2
+  finetune: True
+train:
+  dataset:
+    type: ImageFolderDataset
+    path: data/flowers/train
+    res: 224
+    augment: 1
+  dataloader:
+    num_workers: 1 # You may want to increase this if not preloaded
+val:
+  dataset:
+    type: ImageFolderDataset
+    path: data/flowers/val
+    res: 224
+    augment: 1
+test:
+  dataset:
+    type: ImageFolderDataset
+    path: data/flowers/test
+    res: 224
+    augment: 1

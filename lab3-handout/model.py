@@ -109,7 +109,7 @@ class ResNetJr(torch.nn.Module):
         print(f"Init model with Dropout: {dropout}")
         # layer 1: Conv2 1->24, kernel 5, padding, same -> ReLU -> MaxPool2d
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3,24, kernel_size=5, padding="same"),
+            nn.Conv2d(3,32, kernel_size=5, padding="same"),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout)
         )
@@ -117,25 +117,25 @@ class ResNetJr(torch.nn.Module):
         self.pool_w_flatten = nn.MaxPool2d(2,padding=1)
         # layer 2: Conv2 24->48, kernel 5, padding, same -> ReLU -> MaxPool2d
         self.conv2 = nn.Sequential(
-            nn.Conv2d(24,24, kernel_size=5, padding="same"),
+            nn.Conv2d(32,32, kernel_size=5, padding="same"),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout),
-            nn.Conv2d(24,24, kernel_size=5, padding="same"),
+            nn.Conv2d(32,32, kernel_size=5, padding="same"),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout)
         )
         self.conv_upscale=nn.Sequential(
-            nn.Conv2d(24,48, kernel_size=5, padding="same"),
+            nn.Conv2d(32,64, kernel_size=5, padding="same"),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout)
         )
         
         # layer 3: Conv2 48->64, kernel 5, padding, same -> ReLU -> MaxPool2d
         self.conv3 = nn.Sequential(
-            nn.Conv2d(48,48, kernel_size=3, padding="same"),
+            nn.Conv2d(64,64, kernel_size=3, padding="same"),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout),
-            nn.Conv2d(48,48, kernel_size=3, padding="same"),
+            nn.Conv2d(64,64, kernel_size=3, padding="same"),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout)
         )
@@ -145,7 +145,7 @@ class ResNetJr(torch.nn.Module):
         
         # classification layer 2: linear from input to 256 -> ReLU
         fc1 = nn.Sequential(
-            nn.Linear(48*23*23, 256),
+            nn.Linear(64*23*23, 256),
             nn.ReLU(inplace=True)
         )
     
@@ -168,3 +168,5 @@ class ResNetJr(torch.nn.Module):
         X=X+self.conv3(X)
         X=self.pool_w_flatten(X)
         return self.endstuff(X)
+    
+    

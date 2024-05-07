@@ -3,7 +3,7 @@ import argparse
 import pathlib
 import logging
 from typing import Dict, Any, Optional
-
+from torchvision.models import resnet50, ResNet50_Weights
 def train(config: pathlib.Path, 
           ckpt: pathlib.Path, 
           device: str, 

@@ -492,7 +492,7 @@ class Experiment(object):
         #TODO implement changed learning rate m8b3?
         self.ckpt.optimizer.zero_grad()
         outputs = self.ckpt.model(X)
-        loss = self.ckpt.criterion(outputs.softmax(dim=1), y)
+        loss = self.ckpt.criterion(outputs, y)
         loss.backward()
         self.ckpt.optimizer.step()
         return loss.item(),outputs

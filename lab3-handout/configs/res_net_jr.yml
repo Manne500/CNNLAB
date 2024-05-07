@@ -1,0 +1,26 @@
+name: Mark 3 - ResNetJR
+experiment: ResNetJr_exp
+metrics:
+  halflife: 8 # smoothing option
+model:
+  batchsize: 32
+  epochs: 7
+  n_labels: 5
+  dropout: 0.2
+train:
+  dataset:
+    type: ImageFolderDataset
+    path: data/flowers/train
+    res: 180
+  dataloader:
+    num_workers: 1 # You may want to increase this if not preloaded
+val:
+  dataset:
+    type: ImageFolderDataset
+    path: data/flowers/val
+    res: 180
+test:
+  dataset:
+    type: ImageFolderDataset
+    path: data/flowers/test
+    res: 180

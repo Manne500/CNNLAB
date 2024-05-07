@@ -14,3 +14,8 @@ class SimpleCNN(Experiment):
         self.ckpt.model =SimpleSeqCNN(n_labels,dropout)
         self.ckpt.criterion = nn.CrossEntropyLoss()
         self.ckpt.optimizer = optim.Adam(self.ckpt.model.parameters())
+class ResNetJr_exp(Experiment):
+    def init_model(self, n_labels,dropout, **kwargs):
+        self.ckpt.model =ResNetJr(n_labels,dropout)
+        self.ckpt.criterion = nn.CrossEntropyLoss()
+        self.ckpt.optimizer = optim.Adam(self.ckpt.model.parameters())
